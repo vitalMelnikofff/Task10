@@ -20,10 +20,8 @@ public class Role implements GrantedAuthority {
     @JsonIgnore
     private Set<User> users;
 
-
     public Role() {
     }
-
     public Long getId() {
         return id;
     }
