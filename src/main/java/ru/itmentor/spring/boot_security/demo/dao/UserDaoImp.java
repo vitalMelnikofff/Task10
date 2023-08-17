@@ -51,4 +51,15 @@ public class UserDaoImp implements UserDao {
         return entityManager.createQuery("FROM User WHERE name = :username", User.class)
                 .setParameter("username", username)
                 .getSingleResult();
-    }}
+    }
+
+    @Override
+    public User getUserWithRolesById(Long id) {
+        return null;
+    }
+
+
+
+}
+
+

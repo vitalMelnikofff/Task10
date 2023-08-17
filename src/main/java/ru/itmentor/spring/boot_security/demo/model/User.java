@@ -3,13 +3,11 @@ package ru.itmentor.spring.boot_security.demo.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
-@Component
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -25,7 +23,8 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -102,4 +101,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
 }

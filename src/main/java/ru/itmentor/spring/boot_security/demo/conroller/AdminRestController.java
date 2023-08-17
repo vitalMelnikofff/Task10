@@ -16,16 +16,17 @@ public class AdminRestController {
     @Autowired
     public AdminRestController(UserService userService) {
         this.userService = userService;
+
     }
 
     @GetMapping("/users")
-    public List<User> showAllUsers(){
-        return userService.getAllUsers();
+    public List<User> showAllUsersWithRoles() {
+        return userService.getAllUsersWithRoles();
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable("id") Long id) {
-        return userService.getUserById(id);
+        return userService.getUserWithRolesById(id);
     }
 
     @PostMapping("/new")

@@ -5,16 +5,19 @@ import org.springframework.stereotype.Service;
 import ru.itmentor.spring.boot_security.demo.dao.UserDao;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 
 @Service
 public class UserServiceImp implements UserService {
     private final UserDao userDao;
+    private final EntityManager entityManager;
 
     @Autowired
-    public UserServiceImp(UserDao userDao ) {
+    public UserServiceImp(UserDao userDao, EntityManager entityManager) {
         this.userDao = userDao;
+        this.entityManager = entityManager;
     }
     @Override
     public List<User> getAllUsers() {
@@ -34,9 +37,8 @@ public class UserServiceImp implements UserService {
     }
     @Override
     public User getUserById(Long id) {
-        return userDao.getUserById(id);
+        return userDao.getUserWithRolesById(id);
     }
-
 
 
     @Override
@@ -49,7 +51,21 @@ public class UserServiceImp implements UserService {
     public User findByName(String username) {
         return userDao.findByUserName(username);
     }
-}
+    @Override
+    public User getUserWithRolesById(Long id) {
+        return entityManager.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id = :id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public List<User> getAllUsersWithRoles() {
+        return entityManager.createQuery("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles", User.class)
+                .getResultList();
+    }
+
+    }
+
 
 
 
